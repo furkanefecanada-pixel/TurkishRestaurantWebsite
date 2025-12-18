@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Meet and Eat | About Us</title>
+<meta name="description" content="Meet & Eat — Our story, values, and passion for authentic Turkish cuisine." />
+<style>
+  :root{
+    /* Light theme + navy CTAs */
+    --navy:#1e3a8a;           /* lacivert */
+    --navy-dark:#0f2a5f;      /* koyu lacivert */
+    --ink:#0b1220;            /* metin */
+    --muted:#5b6476;          /* ikincil metin */
+    --bg:#ffffff; --bg2:#f7fafc;
+    --nav-h:96px; --max:1200px; --radius:28px;
+    --shadow:0 24px 60px rgba(17,24,39,.10);
+    --border:rgba(15,23,42,.12);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    font-family:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Arial,sans-serif;
+    color:var(--ink); line-height:1.55; padding-top:60px;
+    background:
+      radial-gradient(1400px 700px at 50% -10%, rgba(30,58,138,.08), transparent 60%),
+      radial-gradient(900px 520px at 8% 100%, rgba(30,58,138,.04), transparent 50%),
+      linear-gradient(180deg, var(--bg), var(--bg2));
+  }
+
+  /* Header (light) */
+  header{
+    position:fixed; inset-inline:0; top:0; height:var(--nav-h);
+    background:rgba(255,255,255,.78);
+    backdrop-filter:saturate(140%) blur(12px);
+    border-bottom:1px solid var(--border); z-index:900;
+  }
+  .nav{max-width:var(--max); height:100%; margin:auto; display:flex; align-items:center; justify-content:flex-end; padding:0 16px}
+
+  /* --- BRAND / LOGO (desktop base) --- */
+  .brand{
+    position:fixed; top:10px; left:16px; z-index:1100;
+    padding:0; background:transparent; border:0; box-shadow:none; display:block;
+  }
+  .brand a{ display:block; line-height:0 }
+  .brand img.logo{
+    height:clamp(56px, 8vw, 86px);
+    width:auto; border-radius:0; background:transparent; object-fit:contain; display:block;
+    transition:.2s;
+  }
+  .brand img.logo:hover{ transform:scale(1.04); filter:brightness(1.05) }
+
+  nav ul{list-style:none; margin:0; padding:0; display:flex; gap:34px}
+  nav a{color:#0f172a; text-decoration:none; font-weight:700}
+  nav a:hover{color:var(--navy-dark)}
+
+  .hamburger{
+    appearance:none; background:transparent; border:none; padding:10px;
+    display:inline-flex; flex-direction:column; gap:6px; border-radius:8px; cursor:pointer
+  }
+  .hamburger span{display:block; width:28px; height:2px; background:#0f172a; border-radius:2px}
+  .hamburger span:nth-child(2){width:22px} .hamburger span:nth-child(3){width:18px}
+
+  /* Drawer (light) */
+  .drawer{position:fixed; inset:0; display:none; z-index:1000}
+  .drawer.active{display:block}
+  .drawer .backdrop{position:absolute; inset:0; background:rgba(0,0,0,.35)}
+  .drawer .panel{
+    position:absolute; right:0; top:0; height:100%; width:min(78%,340px);
+    background:#ffffff; color:#0f172a; border-left:1px solid var(--border);
+    box-shadow:-14px 0 32px rgba(17,24,39,.18); display:flex; flex-direction:column; padding:28px 26px; gap:6px
+  }
+  .drawer .panel a{padding:14px 2px; border-bottom:1px solid var(--border); color:#0f172a; text-decoration:none; font-weight:700}
+
+  /* HERO (light glass) */
+  .hero{position:relative; margin-top:var(--nav-h); min-height: clamp(520px, 62vh, 740px); display:grid; place-items:center; overflow:hidden}
+  .hero-img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transform:scale(1.03); filter:brightness(1)}
+  .hero::before{
+    content:""; position:absolute; inset:0;
+    background:
+      radial-gradient(1000px 420px at 50% 0%, rgba(255,255,255,.70), transparent 60%),
+      linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.85));
+    mix-blend-mode:screen;
+  }
+  .glass{
+    position:relative; z-index:2; width:min(92%,980px); padding:clamp(24px, 4vw, 52px);
+    border-radius:var(--radius); background: rgba(255,255,255,.78);
+    backdrop-filter:blur(16px) saturate(160%); box-shadow:var(--shadow);
+    text-align:center; border:1px solid var(--border); outline:1px solid rgba(30,58,138,.25); outline-offset:-6px
+  }
+  h1{margin:0 0 .35em; font-size:clamp(26px, 4.2vw, 48px)}
+  .lead{margin:0 auto clamp(14px,1.6vw,20px); max-width:760px; color:var(--muted)}
+
+  /* CONTENT */
+  .section{max-width:var(--max); margin:0 auto; padding:56px 16px}
+  .grid{display:grid; gap:18px} @media(min-width:980px){ .grid{grid-template-columns:1.1fr 1fr} }
+
+  /* Cards (light) */
+  .card{
+    background:linear-gradient(180deg, rgba(15,23,42,.05), rgba(15,23,42,.02));
+    border:1px solid var(--border); border-radius:22px; padding:22px;
+    box-shadow:0 16px 30px rgba(17,24,39,.08); color:var(--ink);
+  }
+  .card h3{margin:0 0 10px}
+  .muted{color:var(--muted)}
+  .values{display:grid; gap:12px} @media(min-width:700px){ .values{grid-template-columns:repeat(3,1fr)} }
+  .value{
+    background:#ffffff; border:1px solid var(--border); border-radius:16px; padding:16px;
+    box-shadow:0 8px 18px rgba(17,24,39,.06);
+  }
+
+  /* Buttons */
+  .btn{
+    display:inline-block; padding:12px 20px; border-radius:999px; font-weight:800;
+    background:linear-gradient(180deg,var(--navy),var(--navy-dark));
+    color:#ffffff; text-decoration:none; letter-spacing:.35px; box-shadow:0 12px 26px rgba(15,41,95,.20); border:none;
+  }
+  .btn:hover{filter:brightness(1.03)}
+
+  .chip{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:10px 14px; border-radius:999px; font-weight:700;
+    background:linear-gradient(180deg,var(--navy),var(--navy-dark));
+    color:#ffffff; text-decoration:none; border:none; box-shadow:0 10px 22px rgba(15,41,95,.18);
+  }
+
+  /* FOOTER */
+  footer{
+    background:
+      radial-gradient(1200px 400px at 50% 0%, rgba(30,58,138,.12), transparent 60%),
+      linear-gradient(180deg, #ffffff, #f7fafc);
+    color:var(--ink); border-top:1px solid var(--border);
+  }
+  .footer-wrap{max-width:var(--max); margin:0 auto; padding:56px 16px 28px}
+  .footer{
+    display:grid; grid-template-columns:1fr; gap:22px; border:1px solid var(--border); border-radius:24px;
+    background:linear-gradient(180deg, rgba(15,23,42,.05), rgba(15,23,42,.02)); backdrop-filter: blur(6px);
+    padding:24px; box-shadow:0 14px 32px rgba(17,24,39,.08)
+  }
+  .footer-bottom{display:flex; justify-content:space-between; gap:12px; align-items:center; padding:18px 4px 0}
+
+  /* ===== Responsive nav/logo ===== */
+  @media (min-width:1024px){ .desktop{display:block} .mobile{display:none} }
+  @media (max-width:1023.98px){
+    .desktop{display:none}
+    .mobile{display:flex; gap:16px}
+    .brand{ top:8px; left:8px; padding:0 }                      /* index ile aynı */
+    .brand img.logo{ height:clamp(72px, 20vw, 82px); }          /* index ile aynı */
+    body{padding-top:96px}
+  }
+
+  /* —— Chef bölümü (büyük logo) —— */
+  .value.chef .chef-grid{
+    display:grid; gap:16px; align-items:center;
+    grid-template-columns:1fr;                /* mobile */
+  }
+  .value.chef .chef-badge{ display:grid; place-items:center; }
+  .value.chef .chef-logo{
+    width:clamp(140px, 28vw, 220px);
+    height:auto; object-fit:contain; display:block;
+    filter:drop-shadow(0 10px 24px rgba(17,24,39,.12));
+  }
+  @media(min-width:800px){
+    .value.chef .chef-grid{ grid-template-columns:1.2fr .8fr; }
+    .value.chef{ padding:28px; }
+    .value.chef .chef-logo{ width:clamp(180px, 22vw, 260px); }
+  }
+  .value.chef h3{ margin:0 0 10px; text-align:center; }
+  @media(min-width:800px){ .value.chef h3{ text-align:left; } }
+
+  /* ===== ORDER MODAL (shared) ===== */
+  .modal{ position:fixed; inset:0; display:none; z-index:1200; }
+  .modal.open{ display:block; }
+  .modal .backdrop{ position:absolute; inset:0; background:rgba(0,0,0,.45); }
+  .modal .panel{
+    position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+    width:min(92vw, 560px);
+    background:rgba(255,255,255,.82);
+    border:1px solid rgba(15,23,42,.12);
+    outline:1px solid rgba(30,58,138,.25); outline-offset:-6px;
+    border-radius:24px; box-shadow:0 24px 60px rgba(17,24,39,.18);
+    backdrop-filter: blur(14px) saturate(140%);
+    color:#0f172a; padding:22px 20px;
+  }
+  .modal header{ all:unset; display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:8px }
+  .modal h3{ margin:0; font-size:clamp(18px,2.2vw,22px); }
+  .modal .close{
+    appearance:none; border:none; background:#fff; border:1px solid rgba(15,23,42,.12); border-radius:999px;
+    width:44px; height:44px; display:grid; place-items:center; cursor:pointer;
+    box-shadow:0 8px 20px rgba(17,24,39,.12)
+  }
+  .providers{ display:grid; gap:12px; grid-template-columns:1fr; margin-top:12px }
+  @media(min-width:520px){ .providers{ grid-template-columns:1fr 1fr } }
+  .provider{
+    display:flex; align-items:center; justify-content:center; gap:10px; text-decoration:none; font-weight:900;
+    padding:14px 18px; border-radius:16px; border:1px solid rgba(15,23,42,.12);
+    background:linear-gradient(180deg,var(--navy),var(--navy-dark)); color:#fff;  /* tema uyumlu */
+    box-shadow:0 14px 32px rgba(15,41,95,.20);
+  }
+  .provider svg{ width:20px; height:20px; fill:currentColor }
+  .provider.secondary{
+    background:#ffffff; color:#0f172a; border:1px solid rgba(15,23,42,.18);
+  }
+</style>
+</head>
+<body>
+  <!-- Brand + Header -->
+  <div class="brand">
+    <a href="../index.html" aria-label="Back to home">
+      <img class="logo" src="../Pages/images/logo.png" alt="Meet & Eat">
+    </a>
+  </div>
+  <header>
+    <div class="nav">
+      <nav class="desktop" aria-label="Primary">
+        <ul>
+          <li><a id="orderOpen" href="#" role="button" aria-haspopup="dialog" aria-controls="orderModal">Order Online</a></li>
+          <li><a href="menu.html">Menus</a></li>
+          <li><a href="aboutus.html">About Us</a></li>
+          <li><a href="catering.html">Catering</a></li>
+          <li><a href="reservations.html">Reservations</a></li>
+          <li><a href="donair-solutions.html">Donair Solutions</a></li>
+                <a href="https://www.google.com/maps/place/Meet+and+Eat+-+Halal+Turkish+Restaurant+(New+management+of+Konak+and+Istanbul+)/@49.2814935,-123.0251342,18.54z/data=!4m14!1m7!3m6!1s0x548671d1ce99d747:0xe7e68dc2ebaa75b8!2sMeet+and+Eat+-+Halal+Turkish+Restaurant+(New+management+of+Konak+and+Istanbul+)!8m2!3d49.2812889!4d-123.0246416!16s%2Fg%2F11xskh3yfl!3m5!1s0x548671d1ce99d747:0xe7e68dc2ebaa75b8!8m2!3d49.2812889!4d-123.0246416!16s%2Fg%2F11xskh3yfl?entry=ttu" target="_blank" rel="noopener">Reviews</a>
+        </ul>
+      </nav>
+      <div class="mobile">
+        <button id="menuBtn" class="hamburger" aria-label="Open menu" aria-controls="drawer" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== ORDER MODAL (Uber + DoorDash) ===== -->
+  <div id="orderModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Choose an order provider">
+    <div class="backdrop" data-close></div>
+    <div class="panel">
+      <header>
+        <h3>Order Online</h3>
+        <button class="close" type="button" aria-label="Close" data-close>
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </header>
+      <p class="lead" style="margin:0 0 10px">Choose a delivery partner:</p>
+      <div class="providers">
+        <a class="provider"
+           href="https://www.ubereats.com/ca/store/meet-and-eat-3663-e-hastings-st/tWSUdi7wS8ucIv0AbyUB3Q?pl=JTdCJTIyYWRkcmVzcyUyMiUzQSUyMk1lZXQlMjAlMjYlMjBFYXQlMjIlMkMlMjJyZWZlcmVuY2UlMjIlM0ElMjI3NzE2YjcxYy02ZTNiLTFiYjUtMzAwYy01MDk3OGYxYmQzZDUlMjIlMkMlMjJyZWZlcmVuY2VUeXBlJTIyJTNBJTIydWJlcl9wbGFjZXMlMjIlMkMlMjJsYXRpdHVkZSUyMiUzQS0yMy41OTQ0ODglMkMlMjJsb25naXR1ZGUlMjIlM0EtNDYuNjgzNDglN0Q%3D"
+           target="_blank" rel="noopener" aria-label="Order with Uber Eats">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h-2l-1 2h2l3.6 7.59-1.35 2.44A2 2 0 0 0 10 19h9v-2h-8.42a.25.25 0 0 1-.22-.37L11 14h6.55a2 2 0 0 0 1.86-1.25L22 6H6.31zM7 20a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm10 0a2 2 0 1 0 .001 3.999A2 2 0 0 0 17 20z"/></svg>
+          Uber&nbsp;Eats
+        </a>
+        <a class="provider secondary"
+           href="https://www.doordash.com/store/meet-and-eat-vancouver" target="_blank" rel="noopener" aria-label="Order with DoorDash">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12c0-3 2.5-5 6.5-5H22l-3 3H8.5c-1.9 0-3.5.8-3.5 2s1.6 2 3.5 2H16l-3 3H8.5C4.5 17 2 15 2 12z"/></svg>
+          DoorDash
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Drawer -->
+  <div id="drawer" class="drawer" aria-hidden="true">
+    <div id="backdrop" class="backdrop"></div>
+    <div class="panel" role="dialog" aria-label="Mobile menu">
+      <a id="orderOpenMobile" href="#" role="button" aria-haspopup="dialog" aria-controls="orderModal">Order Online</a>
+      <a href="../index.html">Main Page</a>
+      <a href="menu.html">Menus</a>
+      <a href="catering.html">Catering</a>
+      <a href="reservations.html">Reservations</a>
+      <a href="donair-solutions.html">Donair Solutions</a>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <img class="hero-img" src="../Pages/images/hero.jpg" alt="Warm Turkish dining scene">
+    <div class="glass">
+      <h1>Our Story</h1>
+      <p class="lead">From İstanbul’s bustling streets to Vancouver’s cozy neighborhoods — we bring the soul of Türkiye to your table with halal ingredients, time-honored techniques, and heartfelt hospitality.</p>
+    </div>
+  </section>
+
+  <!-- RICH CONTENT SECTIONS -->
+  <section class="section">
+    <div class="values" style="grid-template-columns:1fr">
+      <div class="value">
+        <h3>Our Journey</h3>
+        <p class="muted">
+          Our journey, born out of a passion for authentic Turkish cuisine and a commitment to creating unforgettable dining experiences, began in Northern Cyprus in 1994 and extended to Canada in 2015. During our 10 years of Canadian experience, we successfully operated a restaurant in Richmond Hill, Ontario, from 2015 to 2021.
+        </p>
+        <p class="muted">
+          Since the summer of 2021, we have grown on Toronto's famous Yonge and Danforth Streets, becoming a favorite for those seeking a blend of traditional and modern Turkish flavors. Our philosophy is founded on hospitality, community, and the joy of sharing delicious meals with loved ones.
+        </p>
+        <p class="muted">
+          Now, we are excited to bring our distinctive Turkish flavors and unique family recipes to Vancouver. We aim to establish a strong presence by infusing the warmth and richness of our cuisine into your city. Our restaurant's journey is an inspiring narrative of our unwavering commitment to authentic flavors and connection to the community.
+        </p>
+      </div>
+
+      <div class="value">
+        <h3>Our Mission</h3>
+        <p class="muted">
+          At Meet and Eat, our mission is to provide an authentic Turkish dining experience that connects people through exceptional food and genuine hospitality. We embrace innovation to transform every meal into a memorable celebration while honoring the rich traditions of Turkish cuisine.
+        </p>
+      </div>
+
+      <div class="value">
+        <h3>Our Vision</h3>
+        <p class="muted">
+          We aspire to become Canada's leading destination for Turkish cuisine, renowned for our outstanding food and welcoming atmosphere. We envision a place where tradition meets innovation, where every guest is treated like family, and where sustainability and environmental responsibility are prioritized in everything we do.
+        </p>
+      </div>
+
+      <div class="value">
+        <h3>Sustainability Policy</h3>
+        <p class="muted">
+          At Meet and Eat, sustainability is at the heart of our operations. We adopt an approach that respects and protects the environment while creating delicious food, aiming to reduce our carbon footprint and support a healthier planet. Our goal is to produce exceptional cuisine while conserving the environment, thus ensuring that future generations can enjoy the natural resources and culinary traditions we value today.
+        </p>
+      </div>
+
+      <div class="value">
+        <h3>Local Ingredients & Environmental Responsibility</h3>
+        <p class="muted">
+          By sourcing fresh, seasonal ingredients from local suppliers, we reduce food miles and guarantee the highest quality. Remaining committed to sustainability, we minimize plastic use, promote recycling, and implement energy-efficient practices.
+        </p>
+      </div>
+
+      <div class="value chef">
+        <div class="chef-grid">
+          <div class="chef-copy">
+            <h3>Meet Chef Mehmet</h3>
+            <p class="muted">
+              Meet Chef Mehmet, the culinary genius and visionary behind our restaurant. With a career dedicated to the fine art of Turkish cuisine, Chef Mehmet has gained extensive experience over many years in the most prestigious institutions across Turkey and the international culinary scene.
+            </p>
+            <p class="muted">
+              Chef Mehmet's deep love for the kitchen translates into a meticulous pursuit of excellence evident in every dish. His expertise blends the rich cultural roots of Turkish cuisine with a modern sensibility. Using only the highest quality ingredients, he ensures every bite is authentic, soulful, and unforgettable.
+            </p>
+          </div>
+          <div class="chef-badge">
+            <img class="chef-logo" src="../Pages/images/IMG_9059.jpg.png" alt="Meet &amp; Eat">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-wrap">
+      <div class="footer">
+        <div>
+          <h3>Contact Us</h3>
+          <p class="lead">Call us, book a table, or stop by — we can’t wait to host you.</p>
+          <div class="contact-row" style="display:flex; gap:12px; flex-wrap:wrap">
+            <a class="chip" href="tel:+16048445040">+1 (604) 844-5040</a>
+            <a class="chip" href="https://www.instagram.com/meetandeat.ca/" target="_blank" rel="noopener">Instagram</a>
+          </div>
+        </div>
+        <div>
+          <h3>Visit</h3>
+          <p class="lead">3663 E Hastings St, Vancouver, BC V5K 0H7</p>
+          <a class="btn" href="reservations.html">Book a Table</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div>© <span id="y"></span> Meet and Eat — All rights reserved.</div>
+        <div></div>
+      </div>
+    </div>
+  </footer>
+
+<!-- ===== Scripts ===== -->
+<script>
+  // Drawer toggle with scroll lock
+  const btn=document.getElementById('menuBtn'),
+        drawer=document.getElementById('drawer'),
+        backdrop=document.getElementById('backdrop');
+  function toggle(open){
+    const will=open??!drawer.classList.contains('active');
+    drawer.classList.toggle('active',will);
+    drawer.setAttribute('aria-hidden',String(!will));
+    btn && btn.setAttribute('aria-expanded',String(will));
+    document.body.style.overflow=will?'hidden':'';
+  }
+  btn && btn.addEventListener('click',()=>toggle());
+  backdrop && backdrop.addEventListener('click',()=>toggle(false));
+  document.getElementById('y').textContent=new Date().getFullYear();
+</script>
+
+<!-- ===== ORDER MODAL — init (once per page) ===== -->
+<script>
+  (function(){
+    const orderModal = document.getElementById('orderModal');
+    const orderOpen = document.getElementById('orderOpen');
+    const orderOpenMobile = document.getElementById('orderOpenMobile');
+    if (!orderModal) return;
+
+    function setModal(open){
+      const willOpen = !!open;
+      orderModal.classList.toggle('open', willOpen);
+      orderModal.setAttribute('aria-hidden', String(!willOpen));
+      document.body.style.overflow = willOpen ? 'hidden' : '';
+      if (willOpen) orderModal.querySelector('.provider')?.focus();
+    }
+
+    orderOpen?.addEventListener('click', e=>{ e.preventDefault(); setModal(true); });
+    orderOpenMobile?.addEventListener('click', e=>{ e.preventDefault(); setModal(true); toggle(false); });
+
+    // backdrop veya [data-close] tıklanınca kapat
+    orderModal.addEventListener('click', e=>{
+      if (e.target.matches('.backdrop') || e.target.closest('[data-close]')) setModal(false);
+    });
+
+    // ESC ile kapat
+    document.addEventListener('keydown', e=>{
+      if(e.key === 'Escape' && orderModal.classList.contains('open')) setModal(false);
+    });
+  })();
+</script>
+</body>
+</html>

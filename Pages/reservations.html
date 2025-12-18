@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Meet and Eat | Reservations</title>
+<meta name="description" content="Reserve your table at Meet & Eat — halal Turkish restaurant in Vancouver." />
+<link rel="icon" type="image/png" href="../Pages/images/logo.png" />
+<style>
+  :root{
+    /* Light theme + navy buttons */
+    --gold:#1e3a8a; --gold-dark:#0f2a5f;
+    --ink:#0b1220; --muted:#5b6476;
+    --bg:#ffffff; --bg2:#f7fafc;
+    --nav-h:96px; --max:1200px; --radius:28px;
+    --shadow:0 24px 60px rgba(17,24,39,.10);
+    --border:rgba(15,23,42,.10);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    font-family:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Arial,sans-serif;
+    color:var(--ink); line-height:1.55; padding-top:60px;
+    background:
+      radial-gradient(1400px 700px at 50% -10%, rgba(30,58,138,.06), transparent 60%),
+      radial-gradient(900px 520px at 8% 100%, rgba(30,58,138,.04), transparent 50%),
+      linear-gradient(180deg, var(--bg), var(--bg2));
+  }
+
+  /* Header */
+  header{
+    position:fixed; inset-inline:0; top:0; height:var(--nav-h);
+    background:transparent; backdrop-filter:saturate(140%) blur(12px);
+    border-bottom:1px solid var(--border); z-index:900
+  }
+  .nav{max-width:var(--max); height:100%; margin:auto; display:flex; align-items:center; justify-content:flex-end; padding:0 16px}
+
+  /* ---- BRAND / LOGO (single source of truth) ---- */
+  .brand{
+    position:fixed; top:10px; left:16px; z-index:1100;
+    padding:0; background:transparent; border:0; box-shadow:none; display:block;
+  }
+  .brand a{ display:block; line-height:0 }
+  .brand img.logo{
+    height:clamp(56px, 8vw, 86px);
+    width:auto; border-radius:0; background:transparent; object-fit:contain; display:block;
+    transition:.2s;
+  }
+  .brand img.logo:hover{ transform:scale(1.04); filter:brightness(1.05) }
+
+  /* NAV LINKS / HAMBURGER */
+  nav ul{list-style:none; margin:0; padding:0; display:flex; gap:34px}
+  nav a{color:#0f172a; text-decoration:none; font-weight:700; letter-spacing:.2px}
+  nav a:hover{color:var(--gold-dark)}
+  .hamburger{appearance:none; background:transparent; border:none; padding:10px; display:inline-flex; flex-direction:column; gap:6px; border-radius:8px; cursor:pointer}
+  .hamburger span{display:block; width:28px; height:2px; background:#0f172a; border-radius:2px}
+  .hamburger span:nth-child(2){width:22px} .hamburger span:nth-child(3){width:18px}
+
+  /* Drawer */
+  .drawer{position:fixed; inset:0; display:none; z-index:1000}
+  .drawer.active{display:block}
+  .drawer .backdrop{position:absolute; inset:0; background:rgba(0,0,0,.35)}
+  .drawer .panel{
+    position:absolute; right:0; top:0; height:100%; width:min(78%,340px); background:#ffffff; color:#0f172a;
+    border-left:1px solid var(--border); box-shadow:-14px 0 32px rgba(17,24,39,.18);
+    display:flex; flex-direction:column; padding:28px 26px; gap:6px
+  }
+  .drawer .panel a{padding:14px 2px; border-bottom:1px solid var(--border); color:#0f172a; text-decoration:none; font-weight:700}
+
+  /* HERO */
+  .hero{position:relative; margin-top:var(--nav-h); min-height: clamp(520px, 70vh, 700px); display:grid; place-items:center; overflow:hidden}
+  .hero-img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transform:scale(1.03); filter:brightness(1) contrast(1.02)}
+  .hero::before{content:""; position:absolute; inset:0;
+    background:radial-gradient(1000px 420px at 50% 0%, rgba(255,255,255,.70), transparent 60%), linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.85)); mix-blend-mode:screen}
+  .glass{position:relative; z-index:2; width:min(92%,980px); padding:clamp(24px, 4vw, 52px);
+    border-radius:var(--radius); background: rgba(255,255,255,.78); backdrop-filter:blur(16px) saturate(160%); box-shadow:var(--shadow);
+    text-align:center; border:1px solid rgba(15,23,42,.12); outline:1px solid rgba(30,58,138,.25); outline-offset:-6px; color:var(--ink)}
+  h1{margin:0 0 .35em; font-size:clamp(26px, 4.2vw, 48px); color:#0b1220}
+  .lead{margin:0 auto clamp(14px,1.6vw,20px); max-width:760px; color:var(--muted)}
+
+  /* CONTENT */
+  .section{max-width:var(--max); margin:0 auto; padding:56px 16px}
+  .grid{display:grid; gap:20px}
+  @media(min-width:980px){ .grid{grid-template-columns:1.15fr .85fr} }
+
+  .card{background:linear-gradient(180deg, rgba(15,23,42,.05), rgba(15,23,42,.02));
+    border:1px solid var(--border); border-radius:20px; padding:20px; box-shadow:0 16px 30px rgba(17,24,39,.08); color:var(--ink)}
+
+  label{display:block; font-weight:800; margin:12px 0 8px}
+  .row{display:grid; gap:12px}
+  @media(min-width:680px){ .row.two{grid-template-columns:1fr 1fr} }
+
+  input, select, textarea{
+    width:100%; padding:14px 14px; border-radius:12px; border:1px solid rgba(15,23,42,.14);
+    background:#ffffff; color:#0f172a; outline:none;
+  }
+  input:focus, select:focus, textarea:focus{ border-color:var(--gold-dark); box-shadow:0 0 0 3px rgba(30,58,138,.15) }
+  textarea{min-height:90px; resize:vertical}
+
+  .picker{ display:grid; gap:12px; grid-template-columns: 1fr 1fr; }
+
+  .btn{
+    display:inline-block; padding:12px 22px; border-radius:999px; font-weight:900; letter-spacing:.35px;
+    background:linear-gradient(180deg,var(--gold),var(--gold-dark)); color:#ffffff; text-decoration:none;
+    box-shadow:0 12px 26px rgba(15,41,95,.22); border:none; cursor:pointer;
+  }
+  .btn:disabled{opacity:.6; cursor:not-allowed}
+
+  .note{color:var(--muted); font-size:14px}
+
+  /* Toast */
+  .toast{
+    position:fixed; left:50%; bottom:24px; transform:translateX(-50%) translateY(20px);
+    min-width:260px; max-width:90vw; padding:12px 16px; border-radius:12px;
+    color:#0a0d12; background:#fff; font-weight:800; box-shadow:0 18px 40px rgba(17,24,39,.18);
+    opacity:0; pointer-events:none; transition:.25s ease; z-index:2000;
+  }
+  .toast.show{opacity:1; pointer-events:auto; transform:translateX(-50%) translateY(0)}
+  .toast.ok{background:#d7f5ea; color:#074332; border:1px solid #9ce7cd}
+  .toast.err{background:#fee2e2; color:#5f1515; border:1px solid #f5b1b1}
+
+  /* Footer */
+  footer{background:radial-gradient(1200px 400px at 50% 0%, rgba(30,58,138,.12), transparent 60%), linear-gradient(180deg, #ffffff, #f7fafc); color:var(--ink); border-top:1px solid var(--border)}
+  .footer-wrap{max-width:var(--max); margin:0 auto; padding:56px 16px 28px}
+  .footer{display:grid; grid-template-columns:1fr; gap:22px; border:1px solid var(--border); border-radius:24px;
+    background:linear-gradient(180deg, rgba(15,23,42,.05), rgba(15,23,42,.02)); backdrop-filter: blur(6px);
+    padding:24px; box-shadow:0 14px 32px rgba(17,24,39,.08)}
+  .footer-bottom{display:flex; justify-content:space-between; gap:12px; align-items:center; padding:18px 4px 0}
+
+  /* ===== Responsive nav/logo ===== */
+  @media (min-width:1024px){
+    .desktop{display:block} .mobile{display:none}
+  }
+  @media (max-width:1023.98px){
+    .desktop{display:none}
+    .mobile{display:flex; gap:16px; align-items:center}
+    .brand{ top:8px; left:8px; padding:0 }
+    .brand img.logo{ height:clamp(72px, 20vw, 82px) !important; }
+    body{ padding-top:96px }
+  }
+
+  /* ===== ORDER MODAL (index ile aynı) ===== */
+  .modal{ position:fixed; inset:0; display:none; z-index:1200; }
+  .modal.open{ display:block; }
+  .modal .backdrop{ position:absolute; inset:0; background:rgba(0,0,0,.45); }
+  .modal .panel{
+    position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+    width:min(92vw, 560px);
+    background:rgba(255,255,255,.82);
+    border:1px solid rgba(15,23,42,.12);
+    outline:1px solid rgba(30,58,138,.25); outline-offset:-6px;
+    border-radius:24px; box-shadow:0 24px 60px rgba(17,24,39,.18);
+    backdrop-filter: blur(14px) saturate(140%);
+    color:#0f172a; padding:22px 20px;
+  }
+  .modal header{ all:unset; display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:8px }
+  .modal h3{ margin:0; font-size:clamp(18px,2.2vw,22px); }
+  .modal .close{
+    appearance:none; border:none; background:#fff; border:1px solid var(--border); border-radius:999px;
+    width:44px; height:44px; display:grid; place-items:center; cursor:pointer;
+    box-shadow:0 8px 20px rgba(17,24,39,.12)
+  }
+  .providers{ display:grid; gap:12px; grid-template-columns:1fr; margin-top:12px }
+  @media(min-width:520px){ .providers{ grid-template-columns:1fr 1fr } }
+  .provider{
+    display:flex; align-items:center; justify-content:center; gap:10px; text-decoration:none; font-weight:900;
+    padding:14px 18px; border-radius:16px; border:1px solid var(--border);
+    background:linear-gradient(180deg,var(--gold),var(--gold-dark)); color:#fff;
+    box-shadow:0 14px 32px rgba(15,41,95,.20);
+  }
+  .provider svg{ width:20px; height:20px; fill:currentColor }
+  .provider.secondary{
+    background:#ffffff; color:#0f172a; border:1px solid rgba(15,23,42,.18);
+  }
+</style>
+</head>
+<body>
+  <!-- Brand -->
+  <div class="brand">
+    <a href="../index.html" aria-label="Go to home">
+      <img class="logo" src="../Pages/images/logo.png" alt="Meet & Eat">
+    </a>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="nav">
+      <nav class="desktop" aria-label="Primary">
+        <ul>
+          <li>
+            <a id="orderOpen" href="#" role="button" aria-haspopup="dialog" aria-controls="orderModal">
+              Order Online
+            </a>
+          </li>
+          <li><a href="menu.html">Menus</a></li>
+          <li><a href="aboutus.html">About Us</a></li>
+          <li><a href="catering.html">Catering</a></li>
+          <li><a href="reservations.html">Reservations</a></li>
+          <li><a href="donair-solutions.html">Donair Solutions</a></li>
+                <a href="https://www.google.com/maps/place/Meet+and+Eat+-+Halal+Turkish+Restaurant+(New+management+of+Konak+and+Istanbul+)/@49.2814935,-123.0251342,18.54z/data=!4m14!1m7!3m6!1s0x548671d1ce99d747:0xe7e68dc2ebaa75b8!2sMeet+and+Eat+-+Halal+Turkish+Restaurant+(New+management+of+Konak+and+Istanbul+)!8m2!3d49.2812889!4d-123.0246416!16s%2Fg%2F11xskh3yfl!3m5!1s0x548671d1ce99d747:0xe7e68dc2ebaa75b8!8m2!3d49.2812889!4d-123.0246416!16s%2Fg%2F11xskh3yfl?entry=ttu" target="_blank" rel="noopener">Reviews</a>
+        </ul>
+      </nav>
+      <div class="mobile">
+        <button id="menuBtn" class="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== ORDER MODAL ===== -->
+  <div id="orderModal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Choose an order provider">
+    <div class="backdrop" data-close></div>
+    <div class="panel">
+      <header>
+        <h3>Order Online</h3>
+        <button class="close" type="button" aria-label="Close" data-close>
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <path d="M6 6l12 12M18 6L6 18" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </header>
+
+      <p class="lead" style="margin:0 0 10px">Choose a delivery partner:</p>
+
+      <div class="providers">
+        <a class="provider"
+           href="https://www.ubereats.com/ca/store/meet-and-eat-3663-e-hastings-st/tWSUdi7wS8ucIv0AbyUB3Q?pl=JTdCJTIyYWRkcmVzcyUyMiUzQSUyMk1lZXQlMjAlMjYlMjBFYXQlMjIlMkMlMjJyZWZlcmVuY2UlMjIlM0ElMjI3NzE2YjcxYy02ZTNiLTFiYjUtMzAwYy01MDk3OGYxYmQzZDUlMjIlMkMlMjJyZWZlcmVuY2VUeXBlJTIyJTNBJTIydWJlcl9wbGFjZXMlMjIlMkMlMjJsYXRpdHVkZSUyMiUzQS0yMy41OTQ0ODglMkMlMjJsb25naXR1ZGUlMjIlM0EtNDYuNjgzNDglN0Q%3D"
+           target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h-2l-1 2h2l3.6 7.59-1.35 2.44A2 2 0 0 0 10 19h9v-2h-8.42a.25.25 0 0 1-.22-.37L11 14h6.55a2 2 0 0 0 1.86-1.25L22 6H6.31zM7 20a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm10 0a2 2 0 1 0 .001 3.999A2 2 0 0 0 17 20z"/></svg>
+          Uber&nbsp;Eats
+        </a>
+
+        <a class="provider secondary"
+           href="https://www.doordash.com/store/meet-and-eat-vancouver" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12c0-3 2.5-5 6.5-5H22l-3 3H8.5c-1.9 0-3.5.8-3.5 2s1.6 2 3.5 2H16l-3 3H8.5C4.5 17 2 15 2 12z"/></svg>
+          DoorDash
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Drawer -->
+  <div id="drawer" class="drawer" aria-hidden="true">
+    <div id="backdrop" class="backdrop"></div>
+    <div class="panel" role="dialog">
+      <a id="orderOpenMobile" href="#" role="button" aria-haspopup="dialog" aria-controls="orderModal">
+        Order Online
+      </a>
+      <a href="../index.html">Main Page</a>
+      <a href="menu.html">Menus</a>
+      <a href="aboutus.html">About Us</a>
+      <a href="catering.html">Catering</a>
+      <a href="reservations.html">Reservations</a>
+      <a href="donair-solutions.html">Donair Solutions</a>
+            <a href="https://www.google.com/maps/place/Meet+and+Eat+-+Halal+Turkish+Restaurant+(New+management+of+Konak+and+Istanbul+)/@49.2814935,-123.0251342,18.54z/data=!4m14!1m7!3m6!1s0x548671d1ce99d747:0xe7e68dc2ebaa75b8!2sMeet+and+Eat+-+Halal+Turkish+Restaurant+(New+management+of+Konak+and+Istanbul+)!8m2!3d49.2812889!4d-123.0246416!16s%2Fg%2F11xskh3yfl!3m5!1s0x548671d1ce99d747:0xe7e68dc2ebaa75b8!8m2!3d49.2812889!4d-123.0246416!16s%2Fg%2F11xskh3yfl?entry=ttu" target="_blank" rel="noopener">Reviews</a>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <img class="hero-img" src="../Pages/images/feature-join.jpg" alt="Dining room">
+    <div class="glass">
+      <h1>Reservations</h1>
+      <p class="lead">Book your table in seconds. For large parties or same-day requests, please call us.</p>
+    </div>
+  </section>
+
+  <!-- CONTENT -->
+  <section class="section">
+    <div class="grid">
+      <!-- Reservation Form -->
+      <form id="rForm" class="card" autocomplete="on" novalidate>
+        <h2 style="margin:0 0 8px">Table Reservation</h2>
+        <p class="note" style="margin:0 0 12px">Please fill the details below. We’ll confirm shortly.</p>
+
+        <div class="row two">
+          <div>
+            <label for="name">Name</label>
+            <input id="name" name="name" placeholder="Full name" required minlength="2" />
+          </div>
+          <div>
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" placeholder="you@example.com" required autocomplete="email" inputmode="email" />
+          </div>
+        </div>
+
+        <div class="row two">
+          <div>
+            <label for="size">Party Size</label>
+            <select id="size" name="size" required>
+              <option value="" disabled selected>Select</option>
+              <option>1</option><option>2</option><option>3</option><option>4</option>
+              <option>5</option><option>6</option><option>7</option><option>8</option>
+              <option>9</option><option>10</option><option>11</option><option>12</option>
+            </select>
+          </div>
+          <div>
+            <label>Date & Time</label>
+            <div class="picker">
+              <input id="date" type="date" required />
+              <select id="time" required></select>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="note">Notes (optional)</label>
+            <textarea id="note" name="note" placeholder="Allergies, occasion, seating preference…"></textarea>
+          </div>
+        </div>
+
+        <div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap">
+          <button id="submitBtn" class="btn" type="submit">Send Request</button>
+          <span class="note" id="helper"></span>
+        </div>
+      </form>
+
+      <!-- Info card -->
+      <div class="card">
+        <h3>Walk-ins Welcome</h3>
+        <p class="lead">We keep a portion of the dining room for walk-ins. Come by and we’ll do our best to seat you quickly.</p>
+        <h3 style="margin-top:16px">Groups & Events</h3>
+        <p class="note">For groups of 8+, private dining, or set menus, please see our <a href="catering.html" style="color:var(--gold); text-decoration:none">Catering</a> page.</p>
+        <h3 style="margin-top:16px">Location</h3>
+        <p class="note">3663 E Hastings St, Vancouver, BC V5K 0H7</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-wrap">
+      <div class="footer">
+        <div>
+          <h3>Need help?</h3>
+          <p class="lead">Call us for same-day or special requests.</p>
+          <div style="display:flex; gap:12px; flex-wrap:wrap">
+            <a class="btn" href="tel:+16048445040">+1 (604) 844-5040</a>
+          </div>
+        </div>
+        <div>
+          <h3>Hours</h3>
+          <p class="lead">Open daily — see details on the home page.</p>
+          <a class="btn" href="../index.html">Home</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div>© <span id="y"></span> Meet and Eat — All rights reserved.</div><div></div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast -->
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <!-- ===== JS (drawer + date/time + modal) ===== -->
+  <script>
+    // Drawer
+    const btn = document.getElementById('menuBtn');
+    const drawer = document.getElementById('drawer');
+    const backdrop = document.getElementById('backdrop');
+    function toggle(open){
+      const willOpen = open ?? !drawer.classList.contains('active');
+      drawer.classList.toggle('active', willOpen);
+      drawer.setAttribute('aria-hidden', String(!willOpen));
+      btn?.setAttribute('aria-expanded', String(willOpen));
+      document.body.style.overflow = willOpen ? 'hidden' : '';
+    }
+    btn?.addEventListener('click', ()=>toggle());
+    backdrop?.addEventListener('click', ()=>toggle(false));
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    // Date & Time helpers
+    const dateEl = document.getElementById('date');
+    const timeEl = document.getElementById('time');
+    const toastEl = document.getElementById('toast');
+    const helper = document.getElementById('helper');
+
+    function showToast(message, ok=true){
+      toastEl.textContent = message;
+      toastEl.className = 'toast show ' + (ok ? 'ok' : 'err');
+      setTimeout(()=> toastEl.className = 'toast', 2600);
+    }
+
+    const today = new Date(); today.setHours(0,0,0,0);
+    const max = new Date(today); max.setDate(max.getDate() + 90);
+    dateEl.min = today.toISOString().slice(0,10);
+    dateEl.max = max.toISOString().slice(0,10);
+
+    function buildSlots(){
+      timeEl.innerHTML = "";
+      const openMin = 11*60 + 30; // 11:30
+      const closeMin = 23*60;     // 23:00
+      for(let m=openMin; m<=closeMin; m+=30){
+        const h = Math.floor(m/60), mm = m%60;
+        const label = new Date(0,0,0,h,mm).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+        const opt = document.createElement('option');
+        opt.value = `${String(h).padStart(2,'0')}:${String(mm).padStart(2,'0')}`;
+        opt.textContent = label;
+        timeEl.appendChild(opt);
+      }
+      disablePastTimes();
+    }
+    function disablePastTimes(){
+      const selected = new Date(dateEl.value);
+      const now = new Date();
+      [...timeEl.options].forEach(opt=>{
+        opt.disabled = false;
+        if(selected.toDateString() === now.toDateString()){
+          const [hh,mm] = opt.value.split(':').map(Number);
+          const tMin = hh*60 + mm;
+          const nowMin = now.getHours()*60 + now.getMinutes() + 30; // +30 min buffer
+          if(tMin < nowMin) opt.disabled = true;
+        }
+      });
+      const firstEnabled = [...timeEl.options].find(o=>!o.disabled);
+      if(firstEnabled) timeEl.value = firstEnabled.value;
+    }
+    buildSlots();
+    dateEl.addEventListener('change', disablePastTimes);
+  </script>
+
+<!-- === EmailJS === -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+  (function(){
+    emailjs.init("DuIjJOKx4wHeTUaCv");  // PUBLIC KEY
+  })();
+
+  const form = document.getElementById('rForm');
+  const submitBtn = document.getElementById('submitBtn');
+
+  function showToast(message, ok=true){
+    const t = document.getElementById('toast');
+    t.textContent = message;
+    t.className = 'toast show ' + (ok ? 'ok' : 'err');
+    setTimeout(()=> t.className = 'toast', 2600);
+  }
+
+  form?.addEventListener('submit', function(e){
+    e.preventDefault();
+
+    const name  = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const size  = document.getElementById('size').value;
+    const date  = document.getElementById('date').value;
+    const time  = document.getElementById('time').value;
+    const notes = document.getElementById('note').value.trim();
+
+    // Validation
+    if(!name || !email || !size || !date || !time){
+      showToast("Please fill all required fields.", false);
+      return;
+    }
+
+    const templateParams = {
+      to_email: "sefercan07@gmail.com",       // ADMİN MAILİ
+      customer_name: name,
+      customer_email: email,
+      party_size: size,
+      date: date,
+      time: time,
+      notes: notes || "—",
+      origin_url: window.location.href
+    };
+
+    submitBtn.disabled = true;
+
+    emailjs.send("customer_email", "template_irm9k2m", templateParams)
+      .then(function(){
+        showToast("Request sent ✓ We'll confirm soon.", true);
+        form.reset();
+        submitBtn.disabled = false;
+      })
+      .catch(function(error){
+        console.error("EmailJS error:", error);
+        showToast("Could not send. Please try again.", false);
+        submitBtn.disabled = false;
+      });
+  });
+</script>
+
+
+  <!-- Order modal JS -->
+  <script>
+  (function(){
+    const orderModal = document.getElementById('orderModal');
+    const orderOpen = document.getElementById('orderOpen');
+    const orderOpenMobile = document.getElementById('orderOpenMobile');
+    if (!orderModal) return;
+
+    function setModal(open){
+      const willOpen = !!open;
+      orderModal.classList.toggle('open', willOpen);
+      orderModal.setAttribute('aria-hidden', String(!willOpen));
+      document.body.style.overflow = willOpen ? 'hidden' : '';
+      if (willOpen) orderModal.querySelector('.provider')?.focus();
+    }
+
+    orderOpen?.addEventListener('click', e=>{ e.preventDefault(); setModal(true); });
+    orderOpenMobile?.addEventListener('click', e=>{ e.preventDefault(); setModal(true); });
+
+    orderModal.addEventListener('click', e=>{
+      if (e.target.matches('.backdrop') || e.target.closest('[data-close]')) setModal(false);
+    });
+    document.addEventListener('keydown', e=>{
+      if(e.key === 'Escape' && orderModal.classList.contains('open')) setModal(false);
+    });
+  })();
+  </script>
+
+</body>
+</html>
